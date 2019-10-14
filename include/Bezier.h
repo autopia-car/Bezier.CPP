@@ -36,6 +36,7 @@ class Bezier
         mat Curvatura(vec t);
         mat Curvatura(int t);
         mat Curvatura(double t);
+        mat CurvaEquid(double dbp);
 
     protected:
 

@@ -266,3 +266,31 @@ mat Bezier::Curvatura(double t)
     Set_t(t);
     return Curvatura();
 }
+
+mat Bezier::CurvaEquid(double dbp)
+{
+    if (!_flag_equi)
+    {
+        if (!_flag_curvaLength) {CurvaLength();}
+
+        // divide 't' para tener puntos "~equidistantes" (en t)
+        unsigned int np = round(_cum_d(_cum_d.n_elem-1)/dbp);
+        if (np > 10000)
+        {
+            _curva.clear();
+            _flag_curva = false;
+            return _curva;
+        }
+
+        vec dp = linspace(0,_cum_d(_cum_d.n_elem-1),np);
+        interp1(_cum_d, _t, dp, _t_equi);
+        //Set_t(_t_equi);
+        _curva = Curva(_t_equi);
+        _tangente = Tangente(_t_equi);
+        _curvatura = Curvatura(_t_equi);
+
+        _flag_equi = true;
+    }
+    return _curva;
+}
+
