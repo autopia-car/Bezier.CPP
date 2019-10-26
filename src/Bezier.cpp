@@ -294,3 +294,20 @@ mat Bezier::CurvaEquid(double dbp)
     return _curva;
 }
 
+double Bezier::CurvaLength()
+{
+    if (!_flag_curvaLength)
+    {
+        if (!_flag_curva) {_curva = Curva();}
+
+        mat vect = _curva.rows(1,_curva.n_rows-1) - _curva.rows(0,_curva.n_rows-2);
+        vec d = sqrt(square(vect.col(0)) + square(vect.col(1)));
+        _cum_d.set_size(_t_length);
+        _cum_d(0) = 0;
+        _cum_d.rows(1,_cum_d.n_rows-1) = cumsum(d);
+        _curve_length = _cum_d(_cum_d.n_elem-1);
+
+        _flag_curvaLength = true;
+    }
+    return _curve_length;
+}
